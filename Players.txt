@@ -1,0 +1,4 @@
+3
+C, Austin, 1, 2, Red
+C, Ryan, 6, 7, gREEN
+H, Kevin, 8, 1, blUE

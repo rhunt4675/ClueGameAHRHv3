@@ -1,0 +1,10 @@
+Our failing tests are important to the functioning of our board specifically. They include our test constants 
+checking they are accurate to our board 26 rows and 26 columns. We needed to see the files are reading by checking the legend 
+is reading properly all of the board symbols. Our rooms have very unique names so e.g. "City of Flickering Destruction" 
+and "Gladiator Pit," so the legend.txt files is the same. Considering all of our initials for the rooms are custom 
+we also needed to check the room initials are are in the correct board location. Many of our rooms are very odd shapes 
+in it is important the columns and rows are accurate for the room labeling. e.g. The corner for room F is at (0,7) and for 
+room L it is at (16,1). The doorways test also has some unique locations. The "Fox Room" has four doors so we wanted to 
+test at least 2 of them, one facing left and one right. As well as "The Room Room" having four doors so we 
+tested two doors each at the corners, one up and one down. It is important to see our corner doors are 
+opening in the correct direction. We also have 18 doors so we need to test all of them are in the board.

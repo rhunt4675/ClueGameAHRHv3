@@ -1,0 +1,11 @@
+C, Computer Room, Card
+F, Fox Room, Card
+R, The Room Room, Card
+D, City of Flickering Destruction, Card
+L, The Long Library, Card
+A, Arwing Hanger, Card
+G, Gladiator Pit, Card
+B, Butcher Shop, Card
+S, Sword Armory, Card
+X, Closet, Other
+W, Walkway, Other
