@@ -434,6 +434,15 @@ public class Board {
 				&& solution.room != null && solution.room.equals(accusation.room)
 				&& solution.weapon != null && solution.weapon.equals(accusation.weapon));
 	}
+	// turns a string input into a card
+	public Card returnCard(String name) {
+		for (Card c : cards) {
+			if (c.getCardName().equals(name)) {
+				return c;
+			}
+		}
+		return null;
+	}
 	
 	public static String[] getAllWeapons() {
 		return Arrays.copyOf(weapons, weapons.length);
