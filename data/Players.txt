@@ -1,0 +1,6 @@
+Human, BLACK, 23, 7
+Miss Scarlet, RED, 0, 7
+Professor Plum, PURPLE, 0, 16
+Reverend Green, GREEN, 6, 23
+Mrs.Peacock, BLUE, 14, 23
+Colonel Mustard, YELLOW, 23, 15
