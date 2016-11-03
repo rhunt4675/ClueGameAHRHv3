@@ -14,15 +14,15 @@ public class ComputerPlayer extends Player {
 	}
 	
 	public BoardCell pickLocation(Set<BoardCell> set) {
-		List<BoardCell> rooms = new ArrayList<BoardCell>(), all = new ArrayList<BoardCell>();
+		List<BoardCell> visitedRooms = new ArrayList<BoardCell>(), all = new ArrayList<BoardCell>();
 		for (BoardCell bc : set) {
 			if (bc.isRoom() && bc.getInitial() != lastRoom)
-				rooms.add(bc);
+				visitedRooms.add(bc);
 			all.add(bc);
 		}
 		
-		if (rooms.size() > 0) {
-			BoardCell choice = rooms.get((int)(Math.random() * rooms.size()));
+		if (visitedRooms.size() > 0) {
+			BoardCell choice = visitedRooms.get((int)(Math.random() * visitedRooms.size()));
 			lastRoom = choice.getInitial();
 			row = choice.getRow();
 			column = choice.getColumn();
