@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -398,6 +399,7 @@ public class Board {
 		int playerPointer = 0;
 		
 		// Iterate through cards
+		Collections.shuffle(Arrays.asList(cards));
 		for (Card c : cards) {
 			if (c.getCardName().equals(solution.weapon)
 					|| c.getCardName().equals(solution.person)
