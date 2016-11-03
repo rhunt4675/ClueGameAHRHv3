@@ -2,7 +2,6 @@ package clueGame;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class ComputerPlayer extends Player {
 	}
 	
 	public Solution createSuggestion() {
-		// Intializing
+		// Initializing
 		Solution newSolution = new Solution();
 		
 		String[] allWeapons = Board.getAllWeapons();
