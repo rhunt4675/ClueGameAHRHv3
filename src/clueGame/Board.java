@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -249,8 +250,8 @@ public class Board {
 	
 	/***********************************************************************/
 	public void setConfigFiles(String boardConfigFile, String roomConfigFile) {
-		this.boardConfigFile = "data/" + boardConfigFile;
-		this.roomConfigFile = "data/" + roomConfigFile;
+		Board.boardConfigFile = "data/" + boardConfigFile;
+		Board.roomConfigFile = "data/" + roomConfigFile;
 	}
 
 	/***********************************************************************/
@@ -291,9 +292,10 @@ public class Board {
 	}
 	
 	public void loadPlayerConfigurationFile(String filename) throws FileNotFoundException, BadConfigFormatException {
+		Scanner in = null;
 		try {
 			FileReader playerConfig = new FileReader(filename);
-			Scanner in = new Scanner(playerConfig);
+			in = new Scanner(playerConfig);
 			
 			int numPlayers = Integer.parseInt(in.nextLine());
 			players = new Player[numPlayers];
@@ -336,13 +338,16 @@ public class Board {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			if (in != null) in.close();
 		}
 	}
 	
 	public void loadWeaponConfigurationFile(String filename) throws FileNotFoundException, BadConfigFormatException {
+		Scanner in = null;
 		try {
 			FileReader cardConfig = new FileReader(filename);
-			Scanner in = new Scanner(cardConfig);
+			in = new Scanner(cardConfig);
 			
 			String numWeapons = in.nextLine();
 			weapons = new String[Integer.parseInt(numWeapons)];
@@ -358,6 +363,8 @@ public class Board {
 			}
 		} catch (NumberFormatException e) {
 			throw new BadConfigFormatException("Expected integer.");
+		} finally {
+			if (in != null) in.close();
 		}
 	}
 	
@@ -392,6 +399,7 @@ public class Board {
 		int playerPointer = 0;
 		
 		// Iterate through cards
+		Collections.shuffle(Arrays.asList(cards));
 		for (Card c : cards) {
 			if (c.getCardName().equals(solution.weapon)
 					|| c.getCardName().equals(solution.person)
@@ -449,8 +457,8 @@ public class Board {
 	public Card[] getCards() { return cards;}
 	public Solution getSolution() { return solution;}
 	
-	public void setWeapons(String[] weapons) {this.weapons = weapons; }
-	public void setPersons(Player[] players) {this.players = players; }
-	public void setLegend(Map<Character, String> map) {this.rooms = map; }
-	public void setCurrentPlayerIndex(int index) {this.currentPlayerIndex = index; }
+	public void setWeapons(String[] weapons) {Board.weapons = weapons; }
+	public void setPersons(Player[] players) {Board.players = players; }
+	public void setLegend(Map<Character, String> map) {Board.rooms = map; }
+	public void setCurrentPlayerIndex(int index) {Board.currentPlayerIndex = index; }
 }

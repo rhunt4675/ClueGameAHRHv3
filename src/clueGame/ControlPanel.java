@@ -9,76 +9,64 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class ControlPanel extends JPanel {
+	private static final long serialVersionUID = -8078217447930365244L;
 
 	public ControlPanel() {
-		// Create JPanels
-		JPanel topRow = new JPanel();
-		JPanel bottomRow = new JPanel();
-		JPanel whosTurn = new JPanel();
-		JPanel die = new JPanel();
-		JPanel guess = new JPanel();
-		JPanel result = new JPanel();
-		
-		//Fill in whostTurn JPanels
+		// Whose Turn TextField
 		JTextField whosTurnText = new JTextField(12);
 		whosTurnText.setEditable(false);
 		
-		JLabel whoseTurnLabel = new JLabel("Whose turn?");
-		
-		whosTurn.add(whoseTurnLabel);
-		whosTurn.add(whosTurnText);
-		
-		// Fill in die JPanel
-		die.setBorder(BorderFactory.createTitledBorder("Die"));
-		
-		JLabel dieRollLabel = new JLabel("Roll");
-		
+		// Die Text TextField
 		JTextField dieText = new JTextField(5);
 		dieText.setEditable(false);
-		
-		die.add(dieRollLabel);
-		die.add(dieText);
-		
-		// Fill in guess JPanel
-		guess.setBorder(BorderFactory.createTitledBorder("Guess"));
-		
-		JLabel guessLabel = new JLabel("Guess");
-		
+
+		// Guess Text TextField
 		JTextField guessText = new JTextField(15);
 		guessText.setEditable(false);
 		
-		guess.add(guessLabel);
-		guess.add(guessText);
-		
-		// Fill in the result JPanel
-		result.setBorder(BorderFactory.createTitledBorder("Guess Result"));
-		
-		JLabel resultLabel = new JLabel("Response");
-		
+		// Result Text TextField		
 		JTextField resultText = new JTextField(8);
 		resultText.setEditable(false);
 		
-		result.add(resultLabel);
+		// Who's Turn? Box
+		JPanel whosTurn = new JPanel();
+		whosTurn.add(new JLabel("Whose turn?"));
+		whosTurn.add(whosTurnText);
+		
+		// Die Display Box
+		JPanel die = new JPanel();
+		die.setBorder(BorderFactory.createTitledBorder("Die"));
+		die.add(new JLabel("Roll"));
+		die.add(dieText);
+		
+		// Guess Box
+		JPanel guess = new JPanel();
+		guess.setBorder(BorderFactory.createTitledBorder("Guess"));
+		guess.add(new JLabel("Guess"));
+		guess.add(guessText);	
+		
+		// Result Box
+		JPanel result = new JPanel();	
+		result.setBorder(BorderFactory.createTitledBorder("Guess Result"));	
+		result.add(new JLabel("Response"));
 		result.add(resultText);
 		
-		//Fill in top row
+		// Top Row
+		JPanel topRow = new JPanel();
 		topRow.setLayout(new GridLayout(1, 3));
 		topRow.add(whosTurn);
 		topRow.add(new JButton("Next player"));
 		topRow.add(new JButton("Make an accusation"));
 		
-		//Fill in the bottom row
+		// Bottom Row
+		JPanel bottomRow = new JPanel();
 		bottomRow.setLayout(new GridLayout(1,3));
 		bottomRow.add(die);
 		bottomRow.add(guess);
 		bottomRow.add(result);
 		
-		
-		
 		this.setLayout(new GridLayout(2,1));
 		this.add(topRow);
-		this.add(bottomRow);
-		
+		this.add(bottomRow);	
 	}
-
 }
