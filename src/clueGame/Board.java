@@ -68,9 +68,10 @@ public class Board {
 		rooms.clear();
 		List<String> cardRooms = new ArrayList<String>();
 		
+		Scanner in = null;		
 		try{
 			FileReader roomConfig = new FileReader(roomConfigFile);
-			Scanner in = new Scanner(roomConfig);
+			in = new Scanner(roomConfig);
 			while (in.hasNextLine()){
 				String line = in.nextLine();
 				String[] type = line.split(", ");
@@ -87,6 +88,8 @@ public class Board {
 			in.close();
 		} catch (FileNotFoundException e){
 			System.out.println(e.getMessage());
+		} finally {
+			if (in != null) in.close();
 		}
 		
 		enterableRooms = new String[cardRooms.size()];
@@ -100,10 +103,11 @@ public class Board {
 		for (BoardCell bc[] : board)
 			Arrays.fill(bc, null);
 		numRows = numColumns = 0;
+		Scanner in = null;
 		
 		try {
 			FileReader boardConfig = new FileReader(boardConfigFile);
-			Scanner in = new Scanner(boardConfig);
+			in = new Scanner(boardConfig);
 			int i = 0;
 			int firstLine = 0;
 			while (in.hasNextLine()){
@@ -147,6 +151,8 @@ public class Board {
 
 		} catch (FileNotFoundException e){
 			System.out.println(e.getMessage());
+		} finally {
+			if (in != null) in.close();
 		}
 	}
 
