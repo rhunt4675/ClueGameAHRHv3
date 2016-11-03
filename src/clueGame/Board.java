@@ -249,8 +249,8 @@ public class Board {
 	
 	/***********************************************************************/
 	public void setConfigFiles(String boardConfigFile, String roomConfigFile) {
-		this.boardConfigFile = "data/" + boardConfigFile;
-		this.roomConfigFile = "data/" + roomConfigFile;
+		Board.boardConfigFile = "data/" + boardConfigFile;
+		Board.roomConfigFile = "data/" + roomConfigFile;
 	}
 
 	/***********************************************************************/
@@ -455,8 +455,8 @@ public class Board {
 	public Card[] getCards() { return cards;}
 	public Solution getSolution() { return solution;}
 	
-	public void setWeapons(String[] weapons) {this.weapons = weapons; }
-	public void setPersons(Player[] players) {this.players = players; }
-	public void setLegend(Map<Character, String> map) {this.rooms = map; }
-	public void setCurrentPlayerIndex(int index) {this.currentPlayerIndex = index; }
+	public void setWeapons(String[] weapons) {Board.weapons = weapons; }
+	public void setPersons(Player[] players) {Board.players = players; }
+	public void setLegend(Map<Character, String> map) {Board.rooms = map; }
+	public void setCurrentPlayerIndex(int index) {Board.currentPlayerIndex = index; }
 }
