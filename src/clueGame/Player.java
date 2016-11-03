@@ -47,6 +47,11 @@ public abstract class Player {
 		myCards.add(card);
 	}
 	
+	@Override
+	public String toString() {
+		return playerName;
+	}
+	
 	public String getName() { return playerName; }
 	public int getRow() { return row; }
 	public int getColumn() { return column; }
