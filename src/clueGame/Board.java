@@ -291,9 +291,10 @@ public class Board {
 	}
 	
 	public void loadPlayerConfigurationFile(String filename) throws FileNotFoundException, BadConfigFormatException {
+		Scanner in = null;
 		try {
 			FileReader playerConfig = new FileReader(filename);
-			Scanner in = new Scanner(playerConfig);
+			in = new Scanner(playerConfig);
 			
 			int numPlayers = Integer.parseInt(in.nextLine());
 			players = new Player[numPlayers];
@@ -336,13 +337,16 @@ public class Board {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			if (in != null) in.close();
 		}
 	}
 	
 	public void loadWeaponConfigurationFile(String filename) throws FileNotFoundException, BadConfigFormatException {
+		Scanner in = null;
 		try {
 			FileReader cardConfig = new FileReader(filename);
-			Scanner in = new Scanner(cardConfig);
+			in = new Scanner(cardConfig);
 			
 			String numWeapons = in.nextLine();
 			weapons = new String[Integer.parseInt(numWeapons)];
@@ -358,6 +362,8 @@ public class Board {
 			}
 		} catch (NumberFormatException e) {
 			throw new BadConfigFormatException("Expected integer.");
+		} finally {
+			if (in != null) in.close();
 		}
 	}
 	
