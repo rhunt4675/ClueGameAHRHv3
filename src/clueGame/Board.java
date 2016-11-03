@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -13,9 +14,12 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
+
+import javax.swing.JPanel;
+
 import clueGame.BadConfigFormatException;
 
-public class Board {
+public class Board extends JPanel{
 	private static BoardCell[][] board;
 	private static Map<Character, String> rooms;
 	private static Map<BoardCell, Set<BoardCell>> adjMatrix;
@@ -141,6 +145,9 @@ public class Board {
 						case 'U':
 						case 'D':
 							board[i][j].setDoorDirection(spot[j].charAt(1));
+							break;
+						case 'N':
+							board[i][j].setName();
 							break;
 						default:
 							break;
@@ -443,7 +450,14 @@ public class Board {
 		}
 		return null;
 	}
-	
+	@Override
+	public void paintComponent(Graphics g) {
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numColumns; j++) {
+				board[i][j].draw(g);
+			}
+		}
+	}
 	public static String[] getAllWeapons() {
 		return Arrays.copyOf(weapons, weapons.length);
 	}
