@@ -452,6 +452,7 @@ public class Board extends JPanel{
 	}
 	@Override
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
 				board[i][j].draw(g);
@@ -463,6 +464,8 @@ public class Board extends JPanel{
 			int col = p.getColumn();
 			board[row][col].drawPlayer(p.getColor(), g);
 		}
+		ControlPanel cp = new ControlPanel();
+		cp.paint(g);
 	}
 	public static String[] getAllWeapons() {
 		return Arrays.copyOf(weapons, weapons.length);
