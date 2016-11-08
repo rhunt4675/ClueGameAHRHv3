@@ -1,4 +1,7 @@
-3
-C, Austin, 1, 2, Red
-C, Ryan, 6, 7, gREEN
-H, Kevin, 8, 1, blUE
+6
+C, Austin, 0, 3, Red
+C, Ryan, 0, 16, gREEN
+H, Kevin, 9, 0, blUE
+C, Sienna, 23, 7, MAGENTA
+C, Kyle, 23, 15, ORANGE
+C, Jean, 6, 23, GRAY

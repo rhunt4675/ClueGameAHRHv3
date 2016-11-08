@@ -457,6 +457,12 @@ public class Board extends JPanel{
 				board[i][j].draw(g);
 			}
 		}
+		
+		for (Player p : players) {
+			int row = p.getRow();
+			int col = p.getColumn();
+			board[row][col].drawPlayer(p.getColor(), g);
+		}
 	}
 	public static String[] getAllWeapons() {
 		return Arrays.copyOf(weapons, weapons.length);

@@ -44,26 +44,26 @@ public class gameSetupTests {
 		Player players[] = board.getPlayers();
 		
 		/* Check Number of Players */
-		assertEquals(players.length, 3);
+		assertEquals(players.length, 6);
 		
 		/* Check a Computer Player */
 		assertEquals(players[0].getName(), "Austin");
-		assertEquals(players[0].getRow(), 1);
-		assertEquals(players[0].getColumn(), 2);
+		assertEquals(players[0].getRow(), 0);
+		assertEquals(players[0].getColumn(), 3);
 		assertEquals(players[0].getColor(), Color.RED);
 		assert(players[0] instanceof ComputerPlayer);
 		
 		/* Check another Computer Player */
 		assertEquals(players[1].getName(), "Ryan");
-		assertEquals(players[1].getRow(), 6);
-		assertEquals(players[1].getColumn(), 7);
+		assertEquals(players[1].getRow(), 0);
+		assertEquals(players[1].getColumn(), 16);
 		assertEquals(players[1].getColor(), Color.GREEN);
 		assert(players[1] instanceof ComputerPlayer);
 		
 		/* Check a Human Player */
 		assertEquals(players[2].getName(), "Kevin");
-		assertEquals(players[2].getRow(), 8);
-		assertEquals(players[2].getColumn(), 1);
+		assertEquals(players[2].getRow(), 9);
+		assertEquals(players[2].getColumn(), 0);
 		assertEquals(players[2].getColor(), Color.BLUE);
 		assert(players[2] instanceof HumanPlayer);
 	}

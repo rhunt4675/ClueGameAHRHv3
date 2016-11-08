@@ -50,7 +50,7 @@ public class DetectiveNotes extends JDialog {
 		weaponGuess.setBorder(BorderFactory.createTitledBorder("Weapon Guess"));
 		weaponGuess.add(new JComboBox<String>(weapons));
 		
-		this.setSize(600, 300);
+		this.setSize(700, 400);
 		setLayout(new GridLayout(3, 2));
 		add(peoplePanel);
 		add(peopleGuess);

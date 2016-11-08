@@ -85,6 +85,7 @@ public class BoardCell {
 	public void setName() {
 		drawStr = true;
 	}
+	
 	public void draw(Graphics g) {
 		int doorHeight = (int) Math.max(1, cellWidth / 5.0);
 		int doorWidth = (int) Math.max(1, cellHeight / 5.0);
@@ -122,5 +123,10 @@ public class BoardCell {
 			g.setColor(Color.BLUE);
 			g.drawString(Board.getRoomName(initial), column*cellWidth, row*cellHeight);
 		}
+	}
+	
+	public void drawPlayer(Color color, Graphics g) {
+		g.setColor(color);
+		g.fillArc(column*cellWidth, row*cellHeight, cellWidth, cellHeight, 0, 360);
 	}
 }
