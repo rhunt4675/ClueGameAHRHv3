@@ -3,6 +3,7 @@ package clueGame;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Player {
 	private String playerName;
@@ -51,6 +52,8 @@ public abstract class Player {
 	public String toString() {
 		return playerName;
 	}
+	
+	public abstract boolean makeMove(Set<BoardCell> targets);
 	
 	public String getName() { return playerName; }
 	public int getRow() { return row; }

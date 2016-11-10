@@ -10,22 +10,22 @@ import javax.swing.JTextField;
 
 public class ControlPanel extends JPanel {
 	private static final long serialVersionUID = -8078217447930365244L;
-
+	public final JButton nextPlayerButton = new JButton("Next Player");
+	public final JButton makeAccusationButton = new JButton("Make Accusation");
+	public JTextField whosTurnText = new JTextField(12);
+	public JTextField dieText = new JTextField(5);
+	public JTextField guessText = new JTextField(15);
+	public JTextField resultText = new JTextField(8);
+	
 	public ControlPanel() {
-		// Whose Turn TextField
-		JTextField whosTurnText = new JTextField(12);
+		// Action Listeners
+		nextPlayerButton.addActionListener(Board.getInstance());
+		makeAccusationButton.addActionListener(Board.getInstance());
+		
+		// Not allowed to edit JTextFields
 		whosTurnText.setEditable(false);
-		
-		// Die Text TextField
-		JTextField dieText = new JTextField(5);
 		dieText.setEditable(false);
-
-		// Guess Text TextField
-		JTextField guessText = new JTextField(15);
 		guessText.setEditable(false);
-		
-		// Result Text TextField		
-		JTextField resultText = new JTextField(8);
 		resultText.setEditable(false);
 		
 		// Who's Turn? Box
@@ -55,8 +55,8 @@ public class ControlPanel extends JPanel {
 		JPanel topRow = new JPanel();
 		topRow.setLayout(new GridLayout(1, 3));
 		topRow.add(whosTurn);
-		topRow.add(new JButton("Next player"));
-		topRow.add(new JButton("Make an accusation"));
+		topRow.add(nextPlayerButton);
+		topRow.add(makeAccusationButton);
 		
 		// Bottom Row
 		JPanel bottomRow = new JPanel();
@@ -69,4 +69,14 @@ public class ControlPanel extends JPanel {
 		this.add(topRow);
 		this.add(bottomRow);	
 	}
+	
+	public void setPlayerText(String name) {
+		whosTurnText.setText(name);
+	}
+	
+	public void setDieRollText(String roll) {
+		dieText.setText(roll);
+	}
+	
+
 }

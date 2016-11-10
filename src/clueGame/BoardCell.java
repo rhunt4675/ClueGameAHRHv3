@@ -9,8 +9,8 @@ public class BoardCell {
 	private char initial;
 	private boolean room;
 	private DoorDirection direction;
-	private static final int cellHeight = 20;
-	private static final int cellWidth = 20;
+	public static final int cellHeight = 20;
+	public static final int cellWidth = 20;
 	private boolean drawStr = false;
 	
 	public BoardCell(int row, int column, boolean room) {
@@ -121,12 +121,17 @@ public class BoardCell {
 		
 		if (drawStr) {
 			g.setColor(Color.BLUE);
-			g.drawString(Board.getRoomName(initial), column*cellWidth, row*cellHeight);
+			g.drawString(Board.getInstance().getRoomName(initial), column*cellWidth, row*cellHeight);
 		}
 	}
 	
 	public void drawPlayer(Color color, Graphics g) {
 		g.setColor(color);
 		g.fillArc(column*cellWidth, row*cellHeight, cellWidth, cellHeight, 0, 360);
+	}
+
+	public void drawTarget(Graphics g) {
+		g.setColor(Color.CYAN);
+		g.fillRect(column*cellWidth + 1, row*cellHeight + 1, cellWidth - 2, cellHeight - 2);
 	}
 }

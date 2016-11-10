@@ -12,10 +12,11 @@ public class DetectiveNotes extends JDialog {
 	private static final long serialVersionUID = 1L;
 	public DetectiveNotes() {
 		setModal(true);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
-		Player[] players = Board.getAllPlayers();
-		String[] rooms = Board.getAllRooms();
-		String[] weapons = Board.getAllWeapons();
+		Player[] players = Board.getInstance().getAllPlayers();
+		String[] rooms = Board.getInstance().getAllRooms();
+		String[] weapons = Board.getInstance().getAllWeapons();
 		
 		// People Options Panel
 		JPanel peoplePanel = new JPanel();

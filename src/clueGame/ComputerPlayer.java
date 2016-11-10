@@ -41,8 +41,8 @@ public class ComputerPlayer extends Player {
 		// Initializing
 		Solution newSolution = new Solution();
 		
-		String[] allWeapons = Board.getAllWeapons();
-		Player[] allPlayers = Board.getAllPlayers();
+		String[] allWeapons = Board.getInstance().getAllWeapons();
+		Player[] allPlayers = Board.getInstance().getAllPlayers();
 		
 		List<String> notSeenWeapons = new ArrayList<String>();
 		List<Player> notSeenPersons = new ArrayList<Player>();
@@ -73,10 +73,20 @@ public class ComputerPlayer extends Player {
 		
 		newSolution.person = notSeenPersons.get((int)(Math.random() * notSeenPersons.size())).getName();
 		newSolution.weapon = notSeenWeapons.get((int)(Math.random() * notSeenWeapons.size()));
-		newSolution.room = Board.getRoomName(lastRoom);
+		newSolution.room = Board.getInstance().getRoomName(lastRoom);
 				
 		
 		return newSolution;
+	}
+	
+	@Override
+	public boolean makeMove(Set<BoardCell> targets) {
+		// Move ComputerPlayer to new cell
+		BoardCell newCell = pickLocation(targets);
+		row = newCell.getRow();
+		column = newCell.getColumn();
+		
+		return false;
 	}
 	
 	/* For Testing Purposes */

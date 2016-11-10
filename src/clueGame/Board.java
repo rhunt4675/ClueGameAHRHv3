@@ -2,6 +2,10 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -15,30 +19,35 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import clueGame.BadConfigFormatException;
 
-public class Board extends JPanel{
-	private static BoardCell[][] board;
-	private static Map<Character, String> rooms;
-	private static Map<BoardCell, Set<BoardCell>> adjMatrix;
-	private static Set<BoardCell> visited;
-	private static Set<BoardCell> targets;
+public class Board extends JPanel implements ActionListener, MouseListener {
+	private final long serialVersionUID = -535617142739434066L;
+	private BoardCell[][] board;
+	private Map<Character, String> rooms;
+	private Map<BoardCell, Set<BoardCell>> adjMatrix;
+	private Set<BoardCell> visited;
+	private Set<BoardCell> targets;
 	private static String boardConfigFile;
 	private static String roomConfigFile;
 	
-	private static Solution solution;
-	private static String[] enterableRooms;
-	private static Player[] players;
-	private static String[] weapons;
-	private static Card[] cards;
+	private Solution solution;
+	private String[] enterableRooms;
+	private Player[] players;
+	private String[] weapons;
+	private Card[] cards;
 	
-	private static int currentPlayerIndex = 0;
+	private int currentPlayerIndex = -1;
+	private boolean humanMustFinishTurn = false;
+	private Set<BoardCell> visibleTargets = null;
+	private ControlPanel controlpanel;
 	
-	private static int numRows = 0;
-	private static int numColumns = 0;
-	public static final int MAX_BOARD_SIZE = 50;
+	private int numRows = 0;
+	private int numColumns = 0;
+	public final int MAX_BOARD_SIZE = 50;
 
 	private static Board theInstance = new Board();
 
@@ -49,6 +58,8 @@ public class Board extends JPanel{
 		adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
 		visited = new HashSet<BoardCell>();
 		solution = new Solution();
+		
+		addMouseListener(this);
 	}
 
 	/***********************************************************************/
@@ -222,6 +233,10 @@ public class Board extends JPanel{
 	/***********************************************************************/
 	public void calcTargets(int row, int col, int pathLength) { // removed for tests: BoardCell startCell
 		targets = new HashSet<BoardCell>();
+		visited = new HashSet<BoardCell>();
+		
+		visited.add(board[row][col]);
+		
 		findTargets(row, col, pathLength);
 	}//End calcTargets	
 
@@ -229,36 +244,32 @@ public class Board extends JPanel{
 	/***********************************************************************/
 	
 	public void findTargets(int row, int col, int pathLength){
-
 		BoardCell thisCell = board[row][col];
-		int numSteps = pathLength;
-		visited.add(thisCell);
 
-		// for each adjCells
-		for (BoardCell cell : adjMatrix.get(thisCell)) {
-			int tempRow = cell.getRow();
-			int tempCol = cell.getColumn();
-			if (visited.contains(cell)) { //if visited do nothing
+		// Iterate through adjacent BoardCell(s)
+		for (BoardCell adj : adjMatrix.get(thisCell)) {
+			// Don't double back on our path
+			if (visited.contains(adj))
 				continue;
-			} 
-			else {	//else add adjCell to visited list
-				visited.add(cell);
-				if (numSteps == 1 || cell.isDoorway()) { // if numSteps == 1, add adjCell to Targets
-					targets.add(cell);
-					visited.remove(cell);
-				} 
-				else { // else calcTargets(adjCell, numbSteps-1 
-					findTargets(tempRow, tempCol, (numSteps-1));
-					visited.remove(cell);
-				}
-			}
+			
+			// Protect ourselves from doubling back in the next round
+			visited.add(adj);
+			
+			// Add a target if we expired the pathLength counter, otherwise recurse
+			if (pathLength == 1 || adj.isDoorway())
+				targets.add(adj);
+			else
+				findTargets(adj.getRow(), adj.getColumn(), pathLength - 1);
+			
+			// Clean adjacent cell out of visited set
+			visited.remove(adj);
 		}
 	}
 	
 	/***********************************************************************/
-	public void setConfigFiles(String boardConfigFile, String roomConfigFile) {
-		Board.boardConfigFile = "data/" + boardConfigFile;
-		Board.roomConfigFile = "data/" + roomConfigFile;
+	public void setConfigFiles(String board, String room) {
+		boardConfigFile = "data/" + board;
+		roomConfigFile = "data/" + room;
 	}
 
 	/***********************************************************************/
@@ -322,12 +333,19 @@ public class Board extends JPanel{
 				Color color = (Color) Class.forName("java.awt.Color").getField(tags[4].toUpperCase()).get(null);
 				
 				// Computer/Human Distinction in First Column
-				if (type.equals("C"))
+				if (type.equals("C")) {
 					players[i] = new ComputerPlayer(name, row, column, color);
-				else if (type.equals("H"))
+				} else if (type.equals("H")) {
 					players[i] = new HumanPlayer(name, row, column, color);
-				else
+					
+					// Two Human Players
+					if (currentPlayerIndex != -1)
+						throw new BadConfigFormatException("Only one human player may be specified.");
+					
+					currentPlayerIndex = i;
+				} else {
 					throw new BadConfigFormatException("Invalid player type specifier: " + type);
+				}
 			}
 			in.close();
 			
@@ -418,10 +436,6 @@ public class Board extends JPanel{
 		}
 	}
 	
-	public void selectAnswer() {
-		
-	}
-	
 	public Card handleSuggestion(Solution suggestion) {
 		// Iterate through players
 		int playerNum = currentPlayerIndex;
@@ -441,6 +455,7 @@ public class Board extends JPanel{
 				&& solution.room != null && solution.room.equals(accusation.room)
 				&& solution.weapon != null && solution.weapon.equals(accusation.weapon));
 	}
+	
 	// turns a string input into a card
 	public Card returnCard(String name) {
 		for (Card c : cards) {
@@ -450,6 +465,7 @@ public class Board extends JPanel{
 		}
 		return null;
 	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -464,23 +480,101 @@ public class Board extends JPanel{
 			int col = p.getColumn();
 			board[row][col].drawPlayer(p.getColor(), g);
 		}
-		ControlPanel cp = new ControlPanel();
-		cp.paint(g);
+		
+ 		if (visibleTargets != null) {
+			for (BoardCell bc : visibleTargets) {
+				int row = bc.getRow();
+				int col = bc.getColumn();
+				board[row][col].drawTarget(g);
+			}
+		}
 	}
-	public static String[] getAllWeapons() {
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == controlpanel.nextPlayerButton) {
+			if (humanMustFinishTurn) {
+				JOptionPane.showMessageDialog(this, "You must finish your turn!");
+			} else {
+				// Setup Control Panel
+				Player player = getCurrentPlayer();
+				int roll = (int) (Math.random() * 6) + 1;
+				controlpanel.setPlayerText(player.getName());
+				controlpanel.setDieRollText(Integer.toString(roll));
+				
+				// Generate and Utilize Targets
+				calcTargets(player.row, player.column, roll);
+				Set<BoardCell> targets = getTargets();
+				humanMustFinishTurn = player.makeMove(targets);				
+				
+				if (player instanceof HumanPlayer) visibleTargets = targets;
+				else visibleTargets = null;
+				
+				if (!humanMustFinishTurn) advancePlayer();
+				
+				repaint();
+			}
+		} else if (e.getSource() == controlpanel.makeAccusationButton) {
+			// Handle Make Accusation Button
+		}
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// Only allowed to select cell when human player is active
+		if (!humanMustFinishTurn)
+			return;
+		
+		int row = (arg0.getY() / (BoardCell.cellHeight));
+		int col = (arg0.getX() / (BoardCell.cellWidth));
+		
+		if (row >= 0 && row < numRows && col >= 0 && col < numColumns) {
+			// Check if selection is valid
+			for (BoardCell bc : visibleTargets) {
+				if (row == bc.getRow() && col == bc.getColumn()) {
+					getCurrentPlayer().column = col;
+					getCurrentPlayer().row = row;
+					
+					advancePlayer();
+					humanMustFinishTurn = false;
+					visibleTargets = null;
+					repaint();
+					return;
+				}
+			}
+			
+			// If we got to here, invalid selection
+			JOptionPane.showMessageDialog(this, "Invalid target selection!");
+		}
+	}
+
+	
+	public String[] getAllWeapons() {
 		return Arrays.copyOf(weapons, weapons.length);
 	}
 	
-	public static Player[] getAllPlayers() {
+	public Player[] getAllPlayers() {
 		return Arrays.copyOf(players, players.length);
 	}
 	
-	public static String[] getAllRooms() {
+	public String[] getAllRooms() {
 		return Arrays.copyOf(enterableRooms, enterableRooms.length);
 	}
 	
-	public static String getRoomName(char roomInitial){
+	public String getRoomName(char roomInitial){
 		return rooms.get(roomInitial);
+	}
+	
+	public Player getCurrentPlayer() {
+		return players[currentPlayerIndex];
+	}
+	
+	public void advancePlayer() {
+		currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+	}
+	
+	public void setControlPanel(ControlPanel cp) {
+		controlpanel = cp;
 	}
 
 	/*  Testing Only */
@@ -489,8 +583,13 @@ public class Board extends JPanel{
 	public Card[] getCards() { return cards;}
 	public Solution getSolution() { return solution;}
 	
-	public void setWeapons(String[] weapons) {Board.weapons = weapons; }
-	public void setPersons(Player[] players) {Board.players = players; }
-	public void setLegend(Map<Character, String> map) {Board.rooms = map; }
-	public void setCurrentPlayerIndex(int index) {Board.currentPlayerIndex = index; }
+	public void setWeapons(String[] param) {weapons = param; }
+	public void setPersons(Player[] param) {players = param; }
+	public void setLegend(Map<Character, String> map) {rooms = map; }
+	public void setCurrentPlayerIndex(int index) {currentPlayerIndex = index; }
+
+	@Override public void mouseEntered(MouseEvent arg0) {}
+	@Override public void mouseExited(MouseEvent arg0) {}
+	@Override public void mousePressed(MouseEvent arg0) {}
+	@Override public void mouseReleased(MouseEvent arg0) {}
 }
