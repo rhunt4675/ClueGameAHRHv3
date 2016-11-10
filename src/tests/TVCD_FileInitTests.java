@@ -44,17 +44,17 @@ public class TVCD_FileInitTests {
 		assertEquals(LEGEND_SIZE, legend.size());
 
 		// Tests to check the legend is loading properly
-		assertEquals("Computer Room", legend.get('C'));
-		assertEquals("Fox Room", legend.get('F'));
-		assertEquals("The Room Room", legend.get('R'));
-		assertEquals("City of Flickering Destruction", legend.get('D'));
-		assertEquals("The Long Library", legend.get('L'));
-		assertEquals("Butcher Shop", legend.get('B'));
-		assertEquals("Arwing Hanger", legend.get('A'));
-		assertEquals("Gladiator Pit", legend.get('G'));
-		assertEquals("Sword Armory", legend.get('S'));
-		assertEquals("Closet", legend.get('X'));
-		assertEquals("Walkway", legend.get('W'));
+		assertEquals("COMPUTER ROOM", legend.get('C'));
+		assertEquals("FOX ROOM", legend.get('F'));
+		assertEquals("THE ROOM ROOM", legend.get('R'));
+		assertEquals("CITY OF FLICKERING DESTRUCTION", legend.get('D'));
+		assertEquals("THE LONG LIBRARY", legend.get('L'));
+		assertEquals("BUTCHER SHOP", legend.get('B'));
+		assertEquals("ARWING HANGER", legend.get('A'));
+		assertEquals("GLADIATOR PIT", legend.get('G'));
+		assertEquals("SWORD ARMORY", legend.get('S'));
+		assertEquals("CLOSET", legend.get('X'));
+		assertEquals("WALKWAY", legend.get('W'));
 	}
 
 	@Test

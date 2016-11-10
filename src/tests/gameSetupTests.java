@@ -77,7 +77,7 @@ public class gameSetupTests {
 		
 		/* Check number of cards */
 		Card cards[] = board.getCards();
-		assertEquals(cards.length, 15);
+		assertEquals(cards.length, 18);
 		
 		/* Count number of each type of card */
 		int people = 0, weapons = 0, rooms = 0;
@@ -90,7 +90,7 @@ public class gameSetupTests {
 		}
 		
 		/* Assert number of each type of card */
-		assertEquals(people, 3);
+		assertEquals(people, 6);
 		assertEquals(weapons, 3);
 		assertEquals(rooms, 9);
 		
@@ -103,7 +103,7 @@ public class gameSetupTests {
 		assertEquals(cards[3].getType(), CardType.PERSON);
 		
 		/* Check a Room */
-		assertEquals(cards[9].getCardName(), "City of Flickering Destruction");
+		assertEquals(cards[9].getCardName(), "COMPUTER ROOM");
 		assertEquals(cards[9].getType(), CardType.ROOM);
 	}
 	
