@@ -39,6 +39,7 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 	private Player[] players;
 	private String[] weapons;
 	private Card[] cards;
+	private MakeAGuess guess;
 	
 	private int currentPlayerIndex = -1;
 	private boolean humanMustFinishTurn = false;
@@ -519,7 +520,20 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 				repaint();
 			}
 		} else if (e.getSource() == controlpanel.makeAccusationButton) {
-			// Handle Make Accusation Button
+			guess = new MakeAGuess(null);
+			guess.setVisible(true);
+			guess.setModal(true);
+			
+		} else if (e.getSource() == guess.submit) {
+				String selectedPerson = ((Player) guess.person.getSelectedItem()).getName();
+				String selectedWeapon = (String) guess.myWeapons.getSelectedItem();
+				String selectedRoom = (String) guess.myRoom.getSelectedItem();
+				solution = new Solution(selectedRoom, selectedPerson, selectedWeapon);
+				guess.dispose();
+				
+				handleSuggestion(solution);
+		} else if (e.getSource() == guess.cancel){
+				guess.dispose();
 		}
 	}
 	
@@ -539,6 +553,11 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 					getCurrentPlayer().column = col;
 					getCurrentPlayer().row = row;
 					
+					if (board[getCurrentPlayer().row][getCurrentPlayer().column].isRoom()) {
+						guess = new MakeAGuess(this.getRoomName(bc.getInitial()));
+						guess.setVisible(true);
+						guess.setModal(true);
+					}
 					advancePlayer();
 					humanMustFinishTurn = false;
 					visibleTargets = null;
