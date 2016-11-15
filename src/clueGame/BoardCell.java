@@ -125,9 +125,19 @@ public class BoardCell {
 		}
 	}
 	
-	public void drawPlayer(Color color, Graphics g) {
-		g.setColor(color);
-		g.fillArc(column*cellWidth, row*cellHeight, cellWidth, cellHeight, 0, 360);
+	public void drawPlayer(Player player, Graphics g) {
+		// Check how many players share a given square
+		int total = 0, index = 0;
+		Player[] players = Board.getInstance().getAllPlayers();
+		for (Player p : players) {
+			if (p.row == row && p.column == column) {
+				if (p == player) index = total;
+				total++;
+			}
+		}
+		
+		g.setColor(player.getColor());
+		g.fillArc(column*cellWidth, row*cellHeight, cellWidth, cellHeight, (int) (index * (360.0 / total)), (int) (360.0 / total));
 	}
 
 	public void drawTarget(Graphics g) {

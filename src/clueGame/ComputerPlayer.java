@@ -96,8 +96,18 @@ public class ComputerPlayer extends Player {
 		
 		// Make a suggestion if moving into a room
 		if (newCell.isRoom()) {
+			// Generate a suggestion
 			Solution solution = createSuggestion();
 			Card card = Board.getInstance().handleSuggestion(solution);
+			
+			// Move the player of interest
+			Player[] player = Board.getInstance().getAllPlayers();
+			for (Player p : player) {
+				if (p.getName().equals(solution.person)) {
+					p.column = column;
+					p.row = row;
+				}
+			}
 			
 			if (card == null) unprovenSolution = solution;
 			else unprovenSolution = null;

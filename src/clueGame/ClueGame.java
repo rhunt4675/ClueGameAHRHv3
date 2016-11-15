@@ -42,6 +42,8 @@ public class ClueGame extends JFrame {
 		detectiveNotesMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == detectiveNotesMenuItem) {
+					if (dn == null)
+						dn = new DetectiveNotes(ClueGame.this);
 					dn.setVisible(true);
 				}
 			}
@@ -52,13 +54,16 @@ public class ClueGame extends JFrame {
 		JMenuBar menubar = new JMenuBar();
 		menubar.add(menu);
 
-		setSize(700, 700);
+		setSize(700, 660);
 		setJMenuBar(menubar);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		add(board, BorderLayout.CENTER);
 		add(cp, BorderLayout.SOUTH);
 		
 		setVisible(true);
+		setResizable(false);
+		setTitle("Clue!");
+		setLocation(100, 100);
 
 		Player[] players = board.getAllPlayers();
 		String name = "";
@@ -69,8 +74,9 @@ public class ClueGame extends JFrame {
 				cards = p.getCards();
 			}
 		}
+		
 		MyCards c = new MyCards(cards);
-		c.setPreferredSize(new Dimension(100, 0));
+		c.setPreferredSize(new Dimension(200, 0));
 		add(c, BorderLayout.EAST);
 		String message = "You are " + name + ", press Next Player to begin play";
 		JOptionPane.showMessageDialog(this, message, "Welcome to Clue!", JOptionPane.INFORMATION_MESSAGE);

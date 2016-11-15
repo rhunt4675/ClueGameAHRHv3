@@ -482,7 +482,7 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 		for (Player p : players) {
 			int row = p.getRow();
 			int col = p.getColumn();
-			board[row][col].drawPlayer(p.getColor(), g);
+			board[row][col].drawPlayer(p, g);
 		}
 		
  		if (visibleTargets != null) {
@@ -509,7 +509,7 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 				// Generate and Utilize Targets
 				calcTargets(player.row, player.column, roll);
 				Set<BoardCell> targets = getTargets();
-				humanMustFinishTurn = player.makeMove(targets);				
+				humanMustFinishTurn = player.makeMove(targets);		
 				
 				// Setup Blue "Hint" squares on board
 				if (player instanceof HumanPlayer) visibleTargets = targets;

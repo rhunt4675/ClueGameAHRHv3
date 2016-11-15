@@ -6,13 +6,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class DetectiveNotes extends JDialog {
 	private static final long serialVersionUID = 1L;
-	public DetectiveNotes() {
-		setModal(true);
+	public DetectiveNotes(JFrame parent) {
+		super(parent);
+		this.setLocationRelativeTo(parent);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
+		setTitle("Detective Notes");
 		
 		Player[] players = Board.getInstance().getAllPlayers();
 		String[] rooms = Board.getInstance().getAllRooms();

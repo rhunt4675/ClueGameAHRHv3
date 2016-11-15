@@ -31,7 +31,7 @@ public class MyCards extends JPanel{
 		suspect.setLayout(new BorderLayout());
 		for (Card c : cards) {
 			if (c.getType() == CardType.PERSON) {
-				person.setText(person.getText()+ "\n" + c.getCardName());
+				person.setText(person.getText() + c.getCardName() + "\n");
 			}
 		}
 		suspect.add(person,BorderLayout.CENTER);
@@ -44,7 +44,7 @@ public class MyCards extends JPanel{
 		room.setLayout(new BorderLayout());
 		for (Card c : cards) {
 			if (c.getType() == CardType.ROOM) {
-				space.setText(space.getText()+ "\n" + c.getCardName());
+				space.setText(space.getText() + c.getCardName() + "\n");
 			}
 		}
 		room.add(space, BorderLayout.CENTER);
@@ -56,7 +56,7 @@ public class MyCards extends JPanel{
 		weapon.setLayout(new BorderLayout());
 		for (Card c : cards) {
 			if (c.getType() == CardType.WEAPON) {
-				w.setText(w.getText()+ "\n" + c.getCardName());
+				w.setText(w.getText() + c.getCardName() + "\n");
 			}
 		}
 		weapon.add(w,BorderLayout.CENTER);
