@@ -319,6 +319,7 @@ public class gameSetupTests {
 	public void handleSuggestion() throws FileNotFoundException, BadConfigFormatException {
 		Player[] players = {new HumanPlayer("hp_0", 0, 0, null), new HumanPlayer("hp_1", 0 ,0, null), new ComputerPlayer("cp_0", 0, 0, null)};
 		board.setPersons(players);
+		board.setCurrentPlayerIndex(0);
 		
 		Card[] cards = {new Card(CardType.PERSON, "person_0"), new Card(CardType.WEAPON, "weapon_0"), new Card(CardType.ROOM, "room_0")};  
 		players[0].addCard(cards[0]);

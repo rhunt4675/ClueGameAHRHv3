@@ -337,11 +337,6 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 					players[i] = new ComputerPlayer(name, row, column, color);
 				} else if (type.equals("H")) {
 					players[i] = new HumanPlayer(name, row, column, color);
-					
-					// Two Human Players
-					if (currentPlayerIndex != -1)
-						throw new BadConfigFormatException("Only one human player may be specified.");
-					
 					currentPlayerIndex = i;
 				} else {
 					throw new BadConfigFormatException("Invalid player type specifier: " + type);
