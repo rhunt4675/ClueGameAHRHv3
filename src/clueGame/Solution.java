@@ -15,4 +15,9 @@ public class Solution {
 		this.room = room;
 		this.weapon = weapon;
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + person + ", " + weapon + ", " + room + "]";
+	}
 }

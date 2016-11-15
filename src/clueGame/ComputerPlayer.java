@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class ComputerPlayer extends Player {
 	private char lastRoom = ' ';
+	private Solution unprovenSolution = null;
 
 	public ComputerPlayer(String playerName, int row, int column, Color color) {
 		super(playerName, row, column, color);
@@ -81,10 +82,26 @@ public class ComputerPlayer extends Player {
 	
 	@Override
 	public boolean makeMove(Set<BoardCell> targets) {
+		// Make an accusation, if possible
+		if (unprovenSolution != null) {
+			boolean win = Board.getInstance().checkAccusation(unprovenSolution);
+			if (win) {System.out.println("Player " + getName() + " wins!"); System.exit(0);}
+			else System.out.println("Player " + getName() + " made an incorrect accusation!");
+		}
+		
 		// Move ComputerPlayer to new cell
 		BoardCell newCell = pickLocation(targets);
 		row = newCell.getRow();
 		column = newCell.getColumn();
+		
+		// Make a suggestion if moving into a room
+		if (newCell.isRoom()) {
+			Solution solution = createSuggestion();
+			Card card = Board.getInstance().handleSuggestion(solution);
+			
+			if (card == null) unprovenSolution = solution;
+			else unprovenSolution = null;
+		}
 		
 		return false;
 	}

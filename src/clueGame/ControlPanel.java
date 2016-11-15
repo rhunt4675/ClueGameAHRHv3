@@ -78,5 +78,11 @@ public class ControlPanel extends JPanel {
 		dieText.setText(roll);
 	}
 	
-
+	public void setGuessTest(String guess) {
+		guessText.setText(guess);
+	}
+	
+	public void setResultText(String result) {
+		resultText.setText(result);
+	}
 }

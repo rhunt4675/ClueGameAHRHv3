@@ -432,16 +432,24 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 	}
 	
 	public Card handleSuggestion(Solution suggestion) {
+		Card result = null;
+		
 		// Iterate through players
 		int playerNum = currentPlayerIndex;
 		for (int i = 0; i < players.length - 1; i++) {
 			playerNum = (playerNum + 1) % players.length;
 			
 			Card action = players[playerNum].disproveSuggestion(suggestion);
-			if (action != null)
-				return action;
+			if (action != null) {
+				result = action; break;
+			}
 		}
-		return null;
+		
+		// Update Control Panel GUI
+		controlpanel.setGuessTest(suggestion.toString());
+		controlpanel.setResultText(result == null ? "" : result.getCardName());
+		
+		return result;
 	}
 	
 	public boolean checkAccusation(Solution accusation) {
@@ -502,6 +510,7 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 				Set<BoardCell> targets = getTargets();
 				humanMustFinishTurn = player.makeMove(targets);				
 				
+				// Setup Blue "Hint" squares on board
 				if (player instanceof HumanPlayer) visibleTargets = targets;
 				else visibleTargets = null;
 				
