@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import clueGame.BadConfigFormatException;
 
 public class Board extends JPanel implements ActionListener, MouseListener {
-	private final long serialVersionUID = -535617142739434066L;
+	private static final long serialVersionUID = 8642429125731128353L;
 	private BoardCell[][] board;
 	private Map<Character, String> rooms;
 	private Map<BoardCell, Set<BoardCell>> adjMatrix;
@@ -39,7 +39,7 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 	private Player[] players;
 	private String[] weapons;
 	private Card[] cards;
-	private MakeAGuess guess;
+	private GuessDialog guess;
 	
 	private int currentPlayerIndex = -1;
 	private boolean humanMustFinishTurn = false;
@@ -280,13 +280,11 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 
 	/***********************************************************************/
 	public int getNumRows() {
-		// TODO Auto-generated method stub
 		return numRows;
 	}
 
 	/***********************************************************************/
 	public int getNumColumns() {
-		// TODO Auto-generated method stub
 		return numColumns;
 	}
 
@@ -296,12 +294,10 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 	}
 
 	public Set<BoardCell> getAdjList(int i, int j) {
-		// TODO Auto-generated method stub
 		return adjMatrix.get(board[i][j]);
 	}
 
 	public Set<BoardCell> getTargets() {
-		// TODO Auto-generated method stub
 		return targets;
 	}
 	
@@ -407,13 +403,14 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 			cards[j] = new Card(CardType.ROOM, enterableRooms[j - i]);
 		i = j;
 		
-		int weaponSolIndex = (int) Math.random() * weapons.length;
-		int playerSolIndex = (int) Math.random() * players.length;
-		int roomSolIndex = (int) Math.random() * enterableRooms.length;
+		int weaponSolIndex = (int) (Math.random() * weapons.length);
+		int playerSolIndex = (int) (Math.random() * players.length);
+		int roomSolIndex = (int) (Math.random() * enterableRooms.length);
 		
 		solution.weapon = weapons[weaponSolIndex];
 		solution.person = players[playerSolIndex].getName();
 		solution.room = enterableRooms[roomSolIndex];
+		System.out.println("Solution: " + solution);
 	}
 	
 	public void deal() {
@@ -434,7 +431,7 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 	
 	public Card handleSuggestion(Solution suggestion) {
 		Card result = null;
-		
+				
 		// Iterate through players
 		int playerNum = currentPlayerIndex;
 		for (int i = 0; i < players.length - 1; i++) {
@@ -447,8 +444,10 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 		}
 		
 		// Update Control Panel GUI
-		controlpanel.setGuessTest(suggestion.toString());
-		controlpanel.setResultText(result == null ? "" : result.getCardName());
+		if (controlpanel != null) {
+			controlpanel.setGuessTest(suggestion.toString());
+			controlpanel.setResultText(result == null ? "No new clue" : result.getCardName());
+		}
 		
 		return result;
 	}
@@ -505,6 +504,8 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 				int roll = (int) (Math.random() * 6) + 1;
 				controlpanel.setPlayerText(player.getName());
 				controlpanel.setDieRollText(Integer.toString(roll));
+				controlpanel.setGuessTest("");
+				controlpanel.setResultText("");
 				
 				// Generate and Utilize Targets
 				calcTargets(player.row, player.column, roll);
@@ -520,20 +521,45 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 				repaint();
 			}
 		} else if (e.getSource() == controlpanel.makeAccusationButton) {
-			guess = new MakeAGuess(null);
-			guess.setVisible(true);
+			// Verify that the human is playing
+			if (!(getCurrentPlayer() instanceof HumanPlayer)) {
+				JOptionPane.showMessageDialog(this, "It is not currently your turn.");
+				return;
+			}
+			
+			// Prompt the User for a Guess
+			guess = new GuessDialog(null);
 			guess.setModal(true);
+			guess.setVisible(true);
 			
 		} else if (e.getSource() == guess.submit) {
-				String selectedPerson = ((Player) guess.person.getSelectedItem()).getName();
-				String selectedWeapon = (String) guess.myWeapons.getSelectedItem();
-				String selectedRoom = (String) guess.myRoom.getSelectedItem();
-				solution = new Solution(selectedRoom, selectedPerson, selectedWeapon);
-				guess.dispose();
-				
-				handleSuggestion(solution);
+			// Gather the Guess
+			String selectedPerson = ((Player) guess.players.getSelectedItem()).getName();
+			String selectedWeapon = (String) guess.weapons.getSelectedItem();
+			String selectedRoom = (String) guess.rooms.getSelectedItem();
+			Solution humanGuess = new Solution(selectedPerson, selectedRoom, selectedWeapon);
+			guess.dispose();
+			
+			// Handle Solution vs. Accusation
+			if (guess.suggestion) {
+				handleSuggestion(humanGuess);
+			} else {
+				if (checkAccusation(humanGuess)) {
+					JOptionPane.showMessageDialog(this, "You Win!!! The correct solution was: " + solution);
+					System.exit(0);
+				} else {
+					JOptionPane.showMessageDialog(this, "Incorrect. Your accusation was wrong: " + humanGuess);
+				}
+			}
+			
+			// Carry on
+			advancePlayer();
+			humanMustFinishTurn = false;
+			repaint();
 		} else if (e.getSource() == guess.cancel){
-				guess.dispose();
+			guess.dispose();
+			advancePlayer();
+			humanMustFinishTurn = false;
 		}
 	}
 	
@@ -552,16 +578,18 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 				if (row == bc.getRow() && col == bc.getColumn()) {
 					getCurrentPlayer().column = col;
 					getCurrentPlayer().row = row;
-					
-					if (board[getCurrentPlayer().row][getCurrentPlayer().column].isRoom()) {
-						guess = new MakeAGuess(this.getRoomName(bc.getInitial()));
-						guess.setVisible(true);
-						guess.setModal(true);
-					}
-					advancePlayer();
-					humanMustFinishTurn = false;
 					visibleTargets = null;
 					repaint();
+					
+					if (board[getCurrentPlayer().row][getCurrentPlayer().column].isRoom()) {
+						guess = new GuessDialog(this.getRoomName(bc.getInitial()));
+						guess.setModal(true);
+						guess.setVisible(true);
+						return;
+					}
+					
+					advancePlayer();
+					humanMustFinishTurn = false;
 					return;
 				}
 			}

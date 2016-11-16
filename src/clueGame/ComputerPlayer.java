@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 public class ComputerPlayer extends Player {
 	private char lastRoom = ' ';
 	private Solution unprovenSolution = null;
@@ -85,8 +87,9 @@ public class ComputerPlayer extends Player {
 		// Make an accusation, if possible
 		if (unprovenSolution != null) {
 			boolean win = Board.getInstance().checkAccusation(unprovenSolution);
-			if (win) {System.out.println("Player " + getName() + " wins!"); System.exit(0);}
-			else System.out.println("Player " + getName() + " made an incorrect accusation!");
+			
+			if (win) {JOptionPane.showMessageDialog(Board.getInstance(), getName() + " Wins! The correct solution was: " + unprovenSolution); System.exit(0);}
+  			else {JOptionPane.showMessageDialog(Board.getInstance(), getName() + " made an incorrect accusation: " + unprovenSolution);}
 		}
 		
 		// Move ComputerPlayer to new cell
@@ -109,7 +112,7 @@ public class ComputerPlayer extends Player {
 				}
 			}
 			
-			if (card == null) unprovenSolution = solution;
+			if (card == null && !getCards().contains((Object) Board.getInstance().getRoomName(newCell.getInitial()))) unprovenSolution = solution;
 			else unprovenSolution = null;
 		}
 		
