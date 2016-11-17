@@ -543,6 +543,8 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 			// Handle Solution vs. Accusation
 			if (guess.suggestion) {
 				handleSuggestion(humanGuess);
+				humanMustFinishTurn = false;
+				advancePlayer();
 			} else {
 				if (checkAccusation(humanGuess)) {
 					JOptionPane.showMessageDialog(this, "You Win!!! The correct solution was: " + solution);
@@ -553,8 +555,6 @@ public class Board extends JPanel implements ActionListener, MouseListener {
 			}
 			
 			// Carry on
-			advancePlayer();
-			humanMustFinishTurn = false;
 			repaint();
 		} else if (e.getSource() == guess.cancel){
 			guess.dispose();
